@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Complex icons</title>
+    <title>GoogleMap Pointers</title>
     <style>
         html, body {
             height: 100%;
@@ -38,6 +38,8 @@
         <input onclick="clearMarkers();" type=button value="Clear">
     </div>
     <div id="map"></div>
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
     <script>
         var map;
         var currentimage;
