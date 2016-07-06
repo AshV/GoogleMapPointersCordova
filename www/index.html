@@ -4,6 +4,9 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>GoogleMap Pointers</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
     <style>
         html, body {
             height: 100%;
@@ -31,15 +34,29 @@
     </style>
 </head>
 <body>
+    <!--
     <div id="floating-panel">
         <input onclick="currentMarkers();" type=button value="Current Locations">
         <input onclick="proposedMarkers();" type=button value="Proposed Locations">
         <input onclick="allMarkers();" type=button value="All Locations">
         <input onclick="clearMarkers();" type=button value="Clear">
+    </div> -->
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a href="" onclick="currentMarkers();">Test 1</a></li>
+                <li class="tab col s3"><a class="active" href="#test2" onclick="proposedMarkers();">Test 2</a></li>
+                <li class="tab col s3 disabled"><a href="#test3">Disabled Tab</a></li>
+                <li class="tab col s3"><a href="#test4" onclick="allMarkers();">Test 4</a></li>
+            </ul>
+        </div>
     </div>
     <div id="map"></div>
     <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <script>
         var map;
         var currentimage;
