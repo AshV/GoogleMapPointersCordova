@@ -1,25 +1,180 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex icons</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
-    <!--
-        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
-        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
-    -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
-    <title>GoogleMapPointers</title>
+        #map {
+            height: 100%;
+        }
 
-    <!-- GoogleMapPointers references -->
-    <link href="css/index.css" rel="stylesheet" />
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto','sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    <p>Hello, your application is ready!</p>
+    <div id="floating-panel">
+        <input onclick="currentMarkers();" type=button value="Current Locations">
+        <input onclick="proposedMarkers();" type=button value="Proposed Locations">
+        <input onclick="allMarkers();" type=button value="All Locations">
+        <input onclick="clearMarkers();" type=button value="Clear">
+    </div>
+    <div id="map"></div>
+    <script>
+        var map;
+        var currentimage;
+        var proposedimage;
+        var headOffice = { lat: 17, lng: 78 };
+        var current = [
+            ['Bondi Beach', 17.2, 78.2, 4],
+            ['Coogee Beach', 17.3, 78.3, 5]];
+        var proposed = [
+            ['Bondi Beach', 17.1, 78.1, 4],
+            ['Coogee Beach', 17.4, 78.4, 5]];
 
-    <!-- Cordova reference, this is added to your app when it's built. -->
-    <script src="cordova.js"></script>
-    <script src="scripts/platformOverrides.js"></script>
+        var currentLocs = [];
+        var proposedLocs = [];
 
-    <script src="scripts/index.js"></script>
+        var locations = [];
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        };
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: headOffice
+            });
+            currentimage = {
+                url: 'currentFlag.png',
+                size: new google.maps.Size(20, 32),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 32)
+            };
+            proposedimage = {
+                url: 'proposedFlag.png',
+                size: new google.maps.Size(20, 32),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 32)
+            };         
+
+            currentMarkers();
+        }
+
+        function currentMarkers() {
+            clearMarkers();
+            locations = [];
+            current.forEach(function (marker) {
+                currentLocs.push(new google.maps.Marker({
+                    position: { lat: marker[1], lng: marker[2] },
+                    map: map,
+                    icon: currentimage,
+                    shape: shape,
+                    title: marker[0],
+                    zIndex: marker[3]
+                }));
+            });
+            currentLocs.forEach(function (marker) {
+                locations.push(marker);
+            });
+            setMarkers(map);
+        }
+
+        function proposedMarkers() {
+            clearMarkers();
+            locations = [];
+            proposed.forEach(function (marker) {
+                proposedLocs.push(new google.maps.Marker({
+                    position: { lat: marker[1], lng: marker[2] },
+                    map: map,
+                    icon: proposedimage,
+                    shape: shape,
+                    title: marker[0],
+                    zIndex: marker[3]
+                }));
+            });
+            proposedLocs.forEach(function (marker) {
+                locations.push(marker);
+            });
+            setMarkers(map);
+        }
+
+        function allMarkers() {
+            clearMarkers();
+            locations = [];
+            current.forEach(function (marker) {
+                currentLocs.push(new google.maps.Marker({
+                    position: { lat: marker[1], lng: marker[2] },
+                    map: map,
+                    icon: currentimage,
+                    shape: shape,
+                    title: marker[0],
+                    zIndex: marker[3]
+                }));
+            });
+            currentLocs.forEach(function (marker) {
+                locations.push(marker);
+            });
+            proposed.forEach(function (marker) {
+                proposedLocs.push(new google.maps.Marker({
+                    position: { lat: marker[1], lng: marker[2] },
+                    map: map,
+                    icon: proposedimage,
+                    shape: shape,
+                    title: marker[0],
+                    zIndex: marker[3]
+                }));
+            });
+            proposedLocs.forEach(function (marker) {
+                locations.push(marker);
+            });
+            setMarkers(map);
+        }
+
+        function clearMarkers() {
+            locations.forEach(function (marker) {
+                marker.setMap(null);
+            });
+        }
+
+        function setMarkers(map) {
+            /*
+            for (var i = 0; i < locations.length; i++) {
+                var location = locations[i];
+                var marker = new google.maps.Marker({
+                    position: { lat: location[1], lng: location[2] },
+                    map: map,
+                    icon: image,
+                    shape: shape,
+                    title: location[0],
+                    zIndex: location[3]
+                });
+            }
+            */
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB23dusD-Vh6SYoCq_pPJoFOsnnesKcpko&callback=initMap">
+    </script>
 </body>
 </html>
