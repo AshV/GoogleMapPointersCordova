@@ -44,10 +44,9 @@
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s3"><a href="" onclick="currentMarkers();">Test 1</a></li>
-                <li class="tab col s3"><a class="active" href="#test2" onclick="proposedMarkers();">Test 2</a></li>
-                <li class="tab col s3 disabled"><a href="#test3">Disabled Tab</a></li>
-                <li class="tab col s3"><a href="#test4" onclick="allMarkers();">Test 4</a></li>
+                <li class="tab col s3"><a href="" onclick="currentMarkers();">Current Locations</a></li>
+                <li class="tab col s3"><a class="active" href="" onclick="proposedMarkers();">Proposed Locations</a></li>
+                <li class="tab col s3"><a href="" onclick="allMarkers();">All Locations</a></li>
             </ul>
         </div>
     </div>
@@ -58,16 +57,28 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <script>
+        /*
+        Sample Locations
+        ['Mouila', 11.0437, -1.88764, 2],
+        ['Awala', 10.0836, 0.186846, 3],
+        ['Batouri', 11.73763, 2.12024, 4],
+        ['Oyem', 11.5809, 1.57818, 5],
+        ['Massica', 10.36852, -0.82622, 6],
+        ['Ekouk', 10.35085, -0.1503, 7],
+        ['Moabi', 11.3519, -2.40236, 8],
+        */
         var map;
         var currentimage;
         var proposedimage;
-        var headOffice = { lat: 17, lng: 78 };
+        var headOffice = { lat: 11.0437, lng: -1.88764 };
         var current = [
-            ['Bondi Beach', 17.2, 78.2, 4],
-            ['Coogee Beach', 17.3, 78.3, 5]];
+        ['Awala', 10.0836, 0.186846, 3],
+        ['Batouri', 11.73763, 2.12024, 4],
+        ['Oyem', 11.5809, 1.57818, 5]];
         var proposed = [
-            ['Bondi Beach', 17.1, 78.1, 4],
-            ['Coogee Beach', 17.4, 78.4, 5]];
+        ['Massica', 10.36852, -0.82622, 6],
+        ['Ekouk', 10.35085, -0.1503, 7],
+        ['Moabi', 11.3519, -2.40236, 8]];
 
         var currentLocs = [];
         var proposedLocs = [];
@@ -81,7 +92,7 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 10,
+                zoom: 5,
                 center: headOffice
             });
             currentimage = {
