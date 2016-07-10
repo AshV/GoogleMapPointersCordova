@@ -50,6 +50,13 @@
             </ul>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs" id="tabsLOC"></ul>
+        </div>
+    </div>
+    <div id="output"></div>
     <div id="map"></div>
     <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script>
@@ -70,15 +77,17 @@
         var map;
         var currentimage;
         var proposedimage;
-        var headOffice = { lat: 11.0437, lng: -1.88764 };
+        var headOffice = { lat: 17.4397569, lng: 78.3836655 };
         var current = [
-        ['Awala', 10.0836, 0.186846, 3],
-        ['Batouri', 11.73763, 2.12024, 4],
-        ['Oyem', 11.5809, 1.57818, 5]];
+            ['Olive', 17.4397738, 78.383577, 3],
+            ['VLSI', 17.4402444, 78.3836532, 4],
+            ['Facebook', 17.4373905, 78.3827769, 5],
+            ['InOrbit', 17.4298626, 78.3944453, 6]];
         var proposed = [
-        ['Massica', 10.36852, -0.82622, 6],
-        ['Ekouk', 10.35085, -0.1503, 7],
-        ['Moabi', 11.3519, -2.40236, 8]];
+            ['RPS', 17.4232379, 78.3757765, 7],
+            ['Shilparamam', 17.4535211, 78.387881, 7],
+            ['WhiteFields', 17.4551481, 78.3640924, 8],
+            ['Hitech MMTS', 17.4638895, 78.3877926, 9]];
 
         var currentLocs = [];
         var proposedLocs = [];
@@ -92,7 +101,7 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
+                zoom: 15,
                 center: headOffice
             });
             currentimage = {
@@ -106,9 +115,50 @@
                 size: new google.maps.Size(20, 32),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(0, 32)
-            };         
+            };
 
             currentMarkers();
+            srcs = [];
+            dsts = [];
+            current.forEach(function (l) {
+                dsts.push({ lat: l[1], lng: l[2] });
+                srcs.push(headOffice);
+            });
+            proposed.forEach(function (l) {
+                dsts.push({ lat: l[1], lng: l[2] });
+                srcs.push(headOffice);
+            });
+            console.log(JSON.stringify(dsts));
+            var service = new google.maps.DistanceMatrixService;
+            service.getDistanceMatrix({
+                origins: [headOffice],
+                destinations: dsts,
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                //                alert(response.rows[0].elements[0].distance.text);
+                console.log(JSON.stringify(response));
+
+                var counter = 0;
+                var limit = response.rows[0].elements.length;
+                for (var c = 0; c < current.length; c++, counter++) {
+                    current[c].push(response.rows[0].elements[counter].distance.text);
+                }
+                for (var p = 0; p < proposed.length; p++, counter++) {
+                    proposed[p].push(response.rows[0].elements[counter].distance.text);
+                }
+
+                $(document).ready(function () {
+                    current.forEach(function (c) {
+                        $('#tabsLOC').append('<li class="tab col s3"><a href="">(' + c[4] + ')' + c[0] + '</a></li>');
+                    });
+                    proposed.forEach(function (p) {
+                        $('#tabsLOC').append('<li class="tab col s3"><a href="">(' + p[4] + ')' + p[0] + '</a></li>');
+                    });
+                });
+            });
         }
 
         function currentMarkers() {
@@ -202,6 +252,7 @@
             }
             */
         }
+
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB23dusD-Vh6SYoCq_pPJoFOsnnesKcpko&callback=initMap">
