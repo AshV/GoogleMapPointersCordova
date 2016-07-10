@@ -92,6 +92,9 @@
         var currentLocs = [];
         var proposedLocs = [];
 
+        var directionsService;
+        var directionsDisplay;
+
         var locations = [];
 
         var shape = {
@@ -138,7 +141,7 @@
                 avoidHighways: false,
                 avoidTolls: false
             }, function (response, status) {
-                //                alert(response.rows[0].elements[0].distance.text);
+                // alert(response.rows[0].elements[0].distance.text);
                 console.log(JSON.stringify(response));
 
                 var counter = 0;
@@ -150,14 +153,31 @@
                     proposed[p].push(response.rows[0].elements[counter].distance.text);
                 }
 
+
+                 directionsService = new google.maps.DirectionsService;
+                 directionsDisplay = new google.maps.DirectionsRenderer;
+                directionsDisplay.setMap(map);
+
+
                 $(document).ready(function () {
                     current.forEach(function (c) {
-                        $('#tabsLOC').append('<li class="tab col s3"><a href="">(' + c[4] + ')' + c[0] + '</a></li>');
+                        $('#tabsLOC').append('<li class="tab col s3"><a href=""  onclick="showRoute(' + c[1] + ',' + c[2] + ');">(' + c[4] + ')' + c[0] + '</a></li>');
                     });
                     proposed.forEach(function (p) {
-                        $('#tabsLOC').append('<li class="tab col s3"><a href="">(' + p[4] + ')' + p[0] + '</a></li>');
+                        $('#tabsLOC').append('<li class="tab col s3"><a href=""  onclick="showRoute(' + p[1] + ',' + p[2] + ');">(' + p[4] + ')' + p[0] + '</a></li>');
                     });
                 });
+            });
+
+        }
+
+        function showRoute(Lat, Lng) {
+            directionsService.route({
+                origin: headOffice,
+                destination: { lat: Lat, lng: Lng },
+                travelMode: google.maps.TravelMode.DRIVING
+            }, function (response, status) {
+                directionsDisplay.setDirections(response);
             });
         }
 
